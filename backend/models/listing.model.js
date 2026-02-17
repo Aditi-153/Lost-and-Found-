@@ -18,14 +18,14 @@ export const listingSchema = new mongoose.Schema({
         type : Array
     },
 
-    image : {
+    imageUrl : {
         type : String,
         required : true
     },
 
     status : {
         type : String ,
-        enum :[ "lost" , "found" ]
+        enum :[ "returned" , "not found" , "found" ]
     },
 
     createdAt : {

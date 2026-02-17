@@ -5,16 +5,15 @@ import jwt from "jsonwebtoken";
 
 export const registerUser = async ( req , res) => {
     try {
-        const { username ,age , email , phone , password } = req.body;
+        const { email, age , phone , password } = req.body;
 
-        if(!username || !age || !email || !phone || !password ){
+        if(!email || !age || !phone || !password ){
             return res.status(400).json({
                 message : "Fields are empty"
             })
         }
 
         const existingUser = await User.findOne({
-            username,
             email,
         })
 
@@ -27,18 +26,24 @@ export const registerUser = async ( req , res) => {
         const hashedPassword = await bcrypt.hash(password , 10)
 
         const user = await User.create({
-            username,
-            age,
             email,
+            age,
             phone,
             password : hashedPassword,
         })
 
-        return res.status(201).json({
+        const token = jwt.sign({  //create token
+            id : user._id,
+        } , process.env.JWT_SECRET_KEY , {
+            expiresIn : "1d"
+        })
+
+        res.cookie("userToken" , token)
+
+        return res.status(201).json({           //201 : created 
             message : "User created successfully!",
             user :{
                 id : user._id,
-                username : user.username,
                 email : user.email,
             }
         })
@@ -64,7 +69,7 @@ export const loginUser = async ( req , res ) => {
         const user = await User.findOne({email})
 
         if(!user){
-            return res.status(400).json({
+            return res.status(404).json({
                 message : "user does not exist"
             })
         }
@@ -79,23 +84,16 @@ export const loginUser = async ( req , res ) => {
 
         const token = jwt.sign({  //create token
             id : user._id,
-            username : user.username,
-            email : user.email,
-        } , process.env.JWT_SECRET , {
+        } , process.env.JWT_SECRET_KEY , {
             expiresIn : "1d"
         })
-        
-        res.cookies("userToken" , token , { //set cookies   // clear this for logout route 
-            httpOnly : true,
-            secure : false,  //false for http and true for https
-            maxAge : 24 * 60 * 60 * 1000 //24 hrs 
-        })
+
+        res.cookie("userToken" , token)
 
         res.status(200).json({
             message : "Login successfully",
             token,
             id : user._id,
-            username : user.username,
             email : user.email,
         })
     } catch (error){

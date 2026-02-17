@@ -8,7 +8,7 @@ export const userAuth = async ( req , res, next ) => {
         const token = req.cookies.userToken;  //get token
 
         if(!token){    // validate token 
-            res.status(400).json({
+            return res.status(400).json({
                 message : "please log in first"
             })
         }
@@ -21,7 +21,7 @@ export const userAuth = async ( req , res, next ) => {
             })
         }
 
-        const user = await User.findById(decoded.id).select("-password")  //fetch user from db , remove password
+        const user = await User.findById(decoded.id) //fetch user from db 
 
         if(!user){
             return res.status(400).json({
@@ -31,11 +31,10 @@ export const userAuth = async ( req , res, next ) => {
 
         req.user = {       //attach user to request
             id : user._id,
-            username : user.username,
             email : user.email  
         }
 
-        next();         // allow to proceed to actual api
+        return next();         // allow to proceed to actual api
 
     } catch(err){
         return res.status(500).json({

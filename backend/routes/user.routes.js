@@ -3,6 +3,7 @@ import { registerUser , loginUser , userLogout } from "../controllers/user.contr
 import { userAuth } from "../middlewares/user.auth.js";
 
 const router = express.Router();
+
 //  http://localhost:3000/user/...
 router.post("/register" , registerUser);
 router.post("/login" , userAuth , loginUser);
