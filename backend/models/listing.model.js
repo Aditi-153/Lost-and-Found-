@@ -33,11 +33,10 @@ export const listingSchema = new mongoose.Schema({
         default : Date.now
     },
 
-    Author: [{ 
+    owner : [{ 
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User" 
-    }],
-
+        ref: "User"
+    }], 
 })
 
 export default mongoose.model("Listing" , listingSchema);
