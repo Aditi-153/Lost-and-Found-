@@ -5,8 +5,8 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "dev": "bun run app.js --watch",
-    "start": "bun run app.js --watch"
+    "dev": "bun --watch run app.js",
+    "start": "bun --watch run app.js"
   },
   "keywords": [],
   "author": "",
