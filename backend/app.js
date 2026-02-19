@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import userRoute from "./routes/user.routes.js";
 import adminRoute from "./routes/admin.routes.js";
-
+import reportRoute from "./routes/listing.routes.js"
 
 mongoose.connect(process.env.MONGO_URL || "mongodb://127.0.0.1:27017/lost-and-found")
 .then(() => console.log("Connected to MongoDB"))
@@ -22,6 +22,7 @@ app.get("/", (req, res) => {
 
 app.use("/user", userRoute);
 app.use("/admin", adminRoute);
+app.use("/report" , reportRoute)
 
 const PORT =process.env.PORT || 3000;
 
