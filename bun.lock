@@ -1,0 +1,14 @@
+{
+  "lockfileVersion": 1,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "dependencies": {
+        "keyword-extractor": "^0.0.28",
+      },
+    },
+  },
+  "packages": {
+    "keyword-extractor": ["keyword-extractor@0.0.28", "https://registry.npmmirror.com/keyword-extractor/-/keyword-extractor-0.0.28.tgz", {}, "sha512-oi7dSPpYtW/3fE0vZiqQgZ8mW3F1V9K4+rBJ0FcVrdXBEQuhZ0zKj7sX74eqGASuepLHf9aYdeonyKHWhYpHQA=="],
+  }
+}
