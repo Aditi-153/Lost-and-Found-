@@ -18,8 +18,6 @@ export const reportLostItem = async (req, res) => {
       remove_duplicates: false,
     });
 
-    console.log(lostKeyword)
-
     const lostItem = await Listing.create({
       location,
       description,
