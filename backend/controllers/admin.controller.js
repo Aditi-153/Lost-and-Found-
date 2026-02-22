@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Listing from "../models/listing.model.js";
 import User from "../models/user.model.js";
+import { FileSystemRouter } from "bun";
 
 export const adminLogin = async (req, res) => {
   try {
@@ -54,46 +55,97 @@ export const adminLogin = async (req, res) => {
   }
 };
 
-export const getAlllistings = async ( req , res ) => {
+// export const getAlllistings = async ( req , res ) => {
+//   try {
+
+//     const { date , status , today } = req.query
+
+//     const userListing = await Listing.find();
+
+//     if(filter.status === "lost"){
+//       return res.status(200).json({
+//         message : "fetch all lost items sucessfully",
+
+//       })
+//     }
+//     return res.status(200).json({
+//       userListing,
+//     })
+                               
+//   } catch(error){
+//     console.log(error)
+//     return res.status(500).json({
+//       message : "failed to fetch listing",
+//       error : error.message
+//     })
+//   }
+// }
+
+export const filterListings = async (req, res) => {
   try {
+    const { stDate , endDate , status , location } = req.query;
 
-    const { date , status , today } = req.query
+    const filter = {};
 
-    const userListing = await Listing.find();
-
-    if(filter.status === "lost"){
-      return res.status(200).json({
-        message : "fetch all lost items sucessfully",
-        
-      })
+    if(stDate && endDate){
+      filter.createdAt = {
+        $gte : new Date(stDate),
+        $lte : new Date(endDate)
+      }
     }
 
-    if(Listing.status === "found"){
-      return res.status(200).json({
-        message : "fetch all found items sucessfully"
-      })
+    if(status) {
+      filter.status = status;
     }
 
-    if(date) {
-      const startDate = new Date(date);
-      const endDate = new Date(date);
-      const today = 
-
-      startDate.setHours(0, 0, 0, 0);
-      endDate.setHours(23, 59, 59, 999);
+    if(location){
+      filter.location = location;
     }
+
+    const userListing = await Listing.find(filter);
+
     res.status(200).json({
-      message : "listing fetch sucessfully",
-      userListing
-    })                          
-  } catch(error){
-    console.log(error)
+      message: "Today's listings fetched successfully",
+      userListing, 
+    });
+    
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch today's listings",
+      error: error.message,
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export const adminLogout = ( req , res ) => {
+  try {
+    res.clearCookie("adminToken");
+    return res.status(200).json({
+      message : "Logout successfully"
+    })
+  } catch (error) {
     return res.status(500).json({
-      message : "failed to fetch listing",
+      message : "Logout failed",
       error : error.message
     })
   }
-}
+}     
+
 
 
 

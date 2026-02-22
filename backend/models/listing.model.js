@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 export const listingSchema = new mongoose.Schema({
     location : {
         type : String ,
-        required : true
+        required : true,
+        enum : [ "canteen", "library" , "classroom" ,"parking" , "campus" ]
     },
     description : {
         type : String ,

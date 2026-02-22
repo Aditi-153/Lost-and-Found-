@@ -1,4 +1,3 @@
-import { isAwaitExpression } from "typescript";
 import Listing from "../models/listing.model.js";
 import keyword_extractor from "keyword-extractor";
 
@@ -30,7 +29,8 @@ export const reportLostItem = async (req, res) => {
       message: "Lost report created successfully",
       location,
       imageUrl,
-      lostItem
+      lostItem,
+      status : "lost"
     });
 
   } catch (error) {
@@ -70,7 +70,8 @@ export const reportFoundItem = async (req, res) => {
       message: "Found report created successfully",
       location,
       imageUrl,
-      foundItem
+      foundItem,
+      status : "found"
     });
 
   } catch (error) {
@@ -82,30 +83,31 @@ export const reportFoundItem = async (req, res) => {
   }
 };
 
-// export const matchItem = async ( req , res ) => {
+
+// export const matchItem = async (req, res) => {
 //   try {
-//     const {location , description } = req.body;
+//     const { location, descriptionArr } = req.body;
 
-//     const foundItem = await  Listing.find({
-//       location,
-//       status : "found"
+//     if (!location || !descriptionArr) {
+//       return res.status(400).json({ 
+//         message: "location and descriptionArr required" 
+//       });
+//     }
+
+//     const foundItems = await Listing.find({ 
+//       status: "found",
+//       location : location , 
+//       descriptionArr
+//     });  
+//     return res.status(200).json({
+//       message: "Matching results",
 //     });
 
-//     const matches = foundItem.map((item) => {
-//       item.descriptionArr.map((keyword) ={
-//         if (){
-
-//         } 
-        
-//       })
-    
-//     });
-//   } catch(error){
+//   } catch (error) {
 //     console.log(error);
 //     return res.status(500).json({
-//       message : "failed to match item",
-//       error : error.message,
-//     })
+//       message: "failed to match item",
+//       error: error.message,
+//     });
 //   }
-// }
-
+// };
