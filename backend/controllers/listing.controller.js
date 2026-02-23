@@ -3,9 +3,9 @@ import keyword_extractor from "keyword-extractor";
 
 export const reportLostItem = async (req, res) => {
   try {
-    const { location, description, imageUrl } = req.body;
+    const { location, description, imageUrl , status } = req.body;
 
-    if (!location || !description || !imageUrl) {
+    if (!location || !description || !imageUrl || !status) {
       return res.status(400).json({
         message: "All fields are required",
       });
@@ -23,6 +23,7 @@ export const reportLostItem = async (req, res) => {
       description,
       imageUrl,
       descriptionArr : lostKeyword,
+      status
     });
 
     return res.status(201).json({
@@ -30,7 +31,7 @@ export const reportLostItem = async (req, res) => {
       location,
       imageUrl,
       lostItem,
-      status : "lost"
+      status
     });
 
   } catch (error) {
@@ -44,9 +45,9 @@ export const reportLostItem = async (req, res) => {
 
 export const reportFoundItem = async (req, res) => {
   try {
-    const { location, description, imageUrl } = req.body;
+    const { location, description, imageUrl , status} = req.body;
 
-    if (!location || !description || !imageUrl) {
+    if (!location || !description || !imageUrl || !status) {
       return res.status(400).json({
         message: "All fields are required",
       });
@@ -64,6 +65,7 @@ export const reportFoundItem = async (req, res) => {
       description,
       imageUrl,
       descriptionArr : foundKeyword,
+      status
     });
 
     return res.status(201).json({
@@ -71,7 +73,7 @@ export const reportFoundItem = async (req, res) => {
       location,
       imageUrl,
       foundItem,
-      status : "found"
+      status 
     });
 
   } catch (error) {

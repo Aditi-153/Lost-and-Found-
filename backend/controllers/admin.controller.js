@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Listing from "../models/listing.model.js";
 import User from "../models/user.model.js";
-import { FileSystemRouter } from "bun";
+
 
 export const adminLogin = async (req, res) => {
   try {
@@ -55,32 +55,6 @@ export const adminLogin = async (req, res) => {
   }
 };
 
-// export const getAlllistings = async ( req , res ) => {
-//   try {
-
-//     const { date , status , today } = req.query
-
-//     const userListing = await Listing.find();
-
-//     if(filter.status === "lost"){
-//       return res.status(200).json({
-//         message : "fetch all lost items sucessfully",
-
-//       })
-//     }
-//     return res.status(200).json({
-//       userListing,
-//     })
-                               
-//   } catch(error){
-//     console.log(error)
-//     return res.status(500).json({
-//       message : "failed to fetch listing",
-//       error : error.message
-//     })
-//   }
-// }
-
 export const filterListings = async (req, res) => {
   try {
     const { stDate , endDate , status , location } = req.query;
@@ -105,32 +79,18 @@ export const filterListings = async (req, res) => {
     const userListing = await Listing.find(filter);
 
     res.status(200).json({
-      message: "Today's listings fetched successfully",
-      userListing, 
+      message: "listings fetched successfully",
+      status,
+      userListing,
     });
     
   } catch (error) {
     res.status(500).json({
-      message: "Failed to fetch today's listings",
+      message: "Failed to fetch listings",
       error: error.message,
     });
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export const adminLogout = ( req , res ) => {
   try {

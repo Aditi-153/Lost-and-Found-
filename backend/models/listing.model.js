@@ -22,7 +22,7 @@ export const listingSchema = new mongoose.Schema({
 
     status : {
         type : String ,
-        enum :[ "returned" , "not found" , "found" ]
+        enum :["lost" , "found" ]
     },
 
     createdAt : {
