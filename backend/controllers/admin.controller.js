@@ -55,9 +55,11 @@ export const adminLogin = async (req, res) => {
   }
 };
 
+
+
 export const filterListings = async (req, res) => {
   try {
-    const { stDate , endDate , status , location } = req.query;
+    const { stDate , endDate , status , location } = req.query; 
 
     const filter = {};
 
@@ -92,6 +94,16 @@ export const filterListings = async (req, res) => {
   }
 };
 
+export const blockUser = async ( req , res ) => {
+  try {
+
+    const { userId } = req.body;
+    
+  } catch(error){
+    message : "failed to block user";
+    error : error.message
+  }
+}
 export const adminLogout = ( req , res ) => {
   try {
     res.clearCookie("adminToken");
