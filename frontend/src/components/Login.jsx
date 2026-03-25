@@ -1,14 +1,42 @@
-
-import {  Link } from "react-router-dom";
-
-
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
-  return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-   
-      <h1 className="text-4xl  font-bold mb-4">
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+        if(!email || !password){
+        alert("fields are empty");
+        return;
+      }
+
+      const res = await axios.post("http://localhost:3000/user/login", {
+        email,
+        password,
+      });
+
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data));
+
+      alert("Login successfully");
+
+      navigate("/dashboard");
+
+    } catch (error) {
+      alert("Incorrect email or password");
+      console.log(error);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-200 flex flex-col items-center justify-center">
+
+      <h1 className="text-4xl font-bold mb-4">
         Login for <span className="text-blue-800">Lost & Found</span> Portal
       </h1>
 
@@ -16,10 +44,8 @@ const Login = () => {
         Login to your account to report, claim, and track lost or found items securely
       </p>
 
-    
       <div className="bg-white shadow-xl rounded-3xl flex p-6 w-[800px]">
 
-     
         <div className="w-full flex items-center justify-center">
           <img
             src="/loginRegisterImage/login-img.jpeg"
@@ -27,33 +53,30 @@ const Login = () => {
             className="rounded-lg"
           />
         </div>
-
-   
+  
         <div className="w-full px-4">
           <h2 className="text-xl font-bold text-blue-800 mb-4">
             Welcome Back !
           </h2>
 
-
-        <p className="font-semibold text-gray-500">Email Address</p>
+          <p className="font-semibold text-gray-500">Email Address</p>
           <input
             type="email"
-            className="border w-full p-2 mb-3 mt-2 rounded border-orange-200 focus:outline-none 
-             focus:ring-1
-             focus:ring-yellow-400 
-             focus:shadow-md"
+            onChange={(e) => setEmail(e.target.value)}
+            className="border w-full p-2 mb-3 mt-2 rounded border-orange-200 focus:outline-none focus:ring-1 focus:ring-yellow-400 focus:shadow-md"
           />
 
           <p className="font-semibold text-gray-500">Password</p>
           <input
             type="password"
-            className="border w-full p-2 mt-2 mb-4 rounded border-orange-200 focus:outline-none 
-             focus:ring-1
-             focus:ring-yellow-400 
-             focus:shadow-md"
+            onChange={(e) => setPassword(e.target.value)}
+            className="border w-full p-2 mt-2 mb-4 rounded border-orange-200 focus:outline-none focus:ring-1 focus:ring-yellow-400 focus:shadow-md"
           />
 
-          <button className="bg-orange-500 text-white w-full py-2 rounded">
+          <button
+            onClick={handleLogin}
+            className="bg-orange-500 text-white w-full py-2 hover:bg-orange-600 active: bg-orange-700 active:scale-95 transition duration-150 rounded"
+          >
             Login
           </button>
 
@@ -64,7 +87,6 @@ const Login = () => {
             </Link>
           </p>
         </div>
-
       </div>
     </div>
   );

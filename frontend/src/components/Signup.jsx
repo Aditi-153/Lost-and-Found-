@@ -1,10 +1,46 @@
-
-
-import {  Link } from "react-router-dom";
-
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
 
 
 const Signup = () => {
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [age, setAge] = useState("")
+  const [phone, setPhone] = useState("")
+  const [password, setPassword] = useState("")
+
+  const navigate = useNavigate();
+  const HandleSignup = async () => {
+
+   
+
+      await axios.post("http://localhost:3000/user/register", {
+        name,
+        email,
+        age,
+        phone,
+        password
+      },
+    {
+      withCredentials : true
+    }).then((res) => {
+      console.log(res)
+    alert("Signup successful");
+      navigate("/dashboard");
+    }).catch((error) => {
+      console.log(error.response.data.message)
+      alert(error.response.data.message)
+    })
+    
+    
+
+
+
+    
+  }
+
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
 
@@ -18,7 +54,6 @@ const Signup = () => {
 
       <div className="bg-white shadow-xl rounded-3xl flex p-6 w-[800px]">
 
-       
         <div className="w-1/2 flex items-center justify-center">
           <img
             src="/loginRegisterImage/signup-img.jpeg"
@@ -27,39 +62,56 @@ const Signup = () => {
           />
         </div>
 
-     
         <div className="w-1/2 px-4">
           <h2 className="text-xl font-bold text-blue-800 mb-4">
             Create Your Account
           </h2>
 
-            <p className="font-semibold text-gray-500">Full name</p>
-          <input className="border w-full p-2 mb-2 mt-2 rounded-xl border-orange-200 focus:outline-none 
-             focus:ring-1
-             focus:ring-orange-200 
-             focus:shadow-md" />
-            <p type="age" className="font-semibold text-gray-500">Age</p>
-          <input  className="border w-full p-2 mb-2 mt-2 rounded-xl border-orange-200 focus:outline-none 
-             focus:ring-1
-             focus:ring-orange-200 
-             focus:shadow-md" />
-             <p className="font-semibold text-gray-500">Email Address</p>
-          <input className="border w-full p-2 mb-2 mt-2 rounded-xl border-orange-200 focus:outline-none 
-             focus:ring-1
-             focus:ring-orange-200 
-             focus:shadow-md" />
-             <p className="font-semibold text-gray-500">Phone number</p>
-          <input className="border w-full p-2 mb-2 mt-2 rounded-xl border-orange-200 focus:outline-none 
-             focus:ring-1
-             focus:ring-orange-200 
-             focus:shadow-md" />
-             <p className="font-semibold text-gray-500">Password</p>
-          <input type="password" className="border w-full p-2 mb-3 mt-2 rounded-xl border-orange-200 focus:outline-none 
-             focus:ring-1
-             focus:ring-orange-400 
-             focus:shadow-md" />
+          <p className="font-semibold text-gray-500">Full name</p>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="border w-full p-2 mb-2 mt-2 rounded-xl border-orange-200 focus:outline-none 
+             focus:ring-1 focus:ring-orange-200 focus:shadow-md"
+          />
 
-          <button className="bg-orange-500 text-white w-full py-2 mt-2 rounded">
+          <p className="font-semibold text-gray-500">Age</p>
+          <input
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            className="border w-full p-2 mb-2 mt-2 rounded-xl border-orange-200 focus:outline-none 
+             focus:ring-1 focus:ring-orange-200 focus:shadow-md"
+          />
+
+          <p className="font-semibold text-gray-500">Email Address</p>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border w-full p-2 mb-2 mt-2 rounded-xl border-orange-200 focus:outline-none 
+             focus:ring-1 focus:ring-orange-200 focus:shadow-md"
+          />
+
+          <p className="font-semibold text-gray-500">Phone number</p>
+          <input
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className="border w-full p-2 mb-2 mt-2 rounded-xl border-orange-200 focus:outline-none 
+             focus:ring-1 focus:ring-orange-200 focus:shadow-md"
+          />
+
+          <p className="font-semibold text-gray-500">Password</p>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border w-full p-2 mb-3 mt-2 rounded-xl border-orange-200 focus:outline-none 
+             focus:ring-1 focus:ring-orange-400 focus:shadow-md"
+          />
+
+          <button
+            onClick={HandleSignup}
+            className="bg-orange-500 text-white w-full py-2 mt-2 rounded"
+          >
             Register
           </button>
 
@@ -74,6 +126,6 @@ const Signup = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Signup;
