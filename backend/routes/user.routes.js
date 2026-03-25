@@ -1,6 +1,7 @@
 import express from "express";
 import { registerUser , loginUser , userLogout } from "../controllers/user.controller.js";
 import { userAuth } from "../middlewares/user.auth.js";
+import { userProfile } from "../controllers/user.controller.js";
 
 const router = express.Router();
 
@@ -8,5 +9,6 @@ const router = express.Router();
 router.post("/register" , registerUser);
 router.post("/login" , userAuth , loginUser);
 router.get("/logout" , userAuth , userLogout);
+router.get("/profile" , userAuth , userProfile);
 
 export default router;  
