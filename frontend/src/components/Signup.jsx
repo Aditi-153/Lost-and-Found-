@@ -13,8 +13,6 @@ const Signup = () => {
   const navigate = useNavigate();
   const HandleSignup = async () => {
 
-   
-
       await axios.post("http://localhost:3000/user/register", {
         name,
         email,
@@ -32,15 +30,7 @@ const Signup = () => {
       console.log(error.response.data.message)
       alert(error.response.data.message)
     })
-    
-    
-
-
-
-    
   }
-
-
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
 
@@ -110,7 +100,7 @@ const Signup = () => {
 
           <button
             onClick={HandleSignup}
-            className="bg-orange-500 text-white w-full py-2 mt-2 rounded"
+            className="bg-orange-500 text-white w-full py-2 hover:bg-orange-600 active: bg-orange-700 active:scale-95 transition duration-150 rounded"
           >
             Register
           </button>

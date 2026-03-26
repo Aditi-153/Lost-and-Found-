@@ -10,7 +10,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-        if(!email || !password){
+      if (!email || !password) {
         alert("fields are empty");
         return;
       }
@@ -18,34 +18,33 @@ const Login = () => {
       const res = await axios.post("http://localhost:3000/user/login", {
         email,
         password,
+      }, {
+        withCredentials : true,
       });
 
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data));
+      console.log(res)
+      
 
       alert("Login successfully");
 
       navigate("/dashboard");
-
     } catch (error) {
-      alert("Incorrect email or password");
-      console.log(error);
+      alert(error.response.data.message);
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-200 flex flex-col items-center justify-center">
-
       <h1 className="text-4xl font-bold mb-4">
         Login for <span className="text-blue-800">Lost & Found</span> Portal
       </h1>
 
       <p className="text-gray-500 mb-6">
-        Login to your account to report, claim, and track lost or found items securely
+        Login to your account to report, claim, and track lost or found items
+        securely
       </p>
 
       <div className="bg-white shadow-xl rounded-3xl flex p-6 w-[800px]">
-
         <div className="w-full flex items-center justify-center">
           <img
             src="/loginRegisterImage/login-img.jpeg"
@@ -53,7 +52,7 @@ const Login = () => {
             className="rounded-lg"
           />
         </div>
-  
+
         <div className="w-full px-4">
           <h2 className="text-xl font-bold text-blue-800 mb-4">
             Welcome Back !
