@@ -59,11 +59,11 @@ export const registerUser = async ( req , res) => {
 export const loginUser = async ( req , res ) => {
     try {
 
-        const { name ,email , password } = req.body;
+        const {email , password } = req.body;
         
-        if(!name || !email || !password){
+        if(!email || !password){
             return res.status(400).json({
-                message : "Email and password are required"
+                message : "Fields are empty"
             })
         }
 
@@ -71,7 +71,7 @@ export const loginUser = async ( req , res ) => {
 
         if(!user){
             return res.status(404).json({
-                message : "user does not exist"
+                message : "User does not exist"
             })
         }
 
@@ -95,7 +95,6 @@ export const loginUser = async ( req , res ) => {
             message : "Login successfully",
             token,
             id : user._id,
-            name : user.name,
             email : user.email,
         })
     } catch (error){
