@@ -1,35 +1,46 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [formData , setFormData ] = useState({
+    email : "",
+    password :""
+  })
 
   const navigate = useNavigate();
 
+  const handleChange =(e) => {
+    setFormData( {
+      ...formData,
+      [e.target.name] : e.target.value
+    })
+  }
+
   const handleLogin = async () => {
+    const { email, password } = formData;
+
+    if (!email || !password) {
+      toast.error("fields are empty");
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      if (!email || !password) {
-        alert("fields are empty");
-        return;
-      }
-
-      const res = await axios.post("http://localhost:3000/user/login", {
-        email,
-        password,
-      }, {
-        withCredentials : true,
-      });
-
-      console.log(res)
-      
-
-      alert("Login successfully");
+      await axios.post(
+        import.meta.env.VITE_LOGIN_URL,
+        { email, password },
+        { withCredentials: true },
+      );
 
       navigate("/dashboard");
     } catch (error) {
-      alert(error.response.data.message);
+     toast.error(error?.response?.data?.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,20 +72,31 @@ const Login = () => {
           <p className="font-semibold text-gray-500">Email Address</p>
           <input
             type="email"
-            onChange={(e) => setEmail(e.target.value)}
-            className="border w-full p-2 mb-3 mt-2 rounded border-orange-200 focus:outline-none focus:ring-1 focus:ring-yellow-400 focus:shadow-md"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="border w-full p-2 mb-3 mt-2 rounded-xl border-orange-200 focus:outline-none focus:ring-1 focus:ring-yellow-400 focus:shadow-md"
           />
 
           <p className="font-semibold text-gray-500">Password</p>
           <input
             type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            className="border w-full p-2 mt-2 mb-4 rounded border-orange-200 focus:outline-none focus:ring-1 focus:ring-yellow-400 focus:shadow-md"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            className="border w-full p-2 mt-2 mb-4 rounded-xl border-orange-200 focus:outline-none focus:ring-1 focus:ring-yellow-400 focus:shadow-md"
           />
 
           <button
-            onClick={handleLogin}
-            className="bg-orange-500 text-white w-full py-2 hover:bg-orange-600 active: bg-orange-700 active:scale-95 transition duration-150 rounded"
+            onClick={() => {
+              toast.promise(handleLogin(), {
+                loading: "Loading",
+                success: "Logged in",
+                error: (error) => `${error?.response?.data?.message}`,
+              });
+            }}
+            disabled={loading}
+            className="bg-orange-500 text-white w-full py-2 hover:bg-orange-600 active:bg-orange-700 active:scale-95 transition duration-150 rounded"
           >
             Login
           </button>

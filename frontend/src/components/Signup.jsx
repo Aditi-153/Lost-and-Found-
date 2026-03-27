@@ -1,38 +1,53 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-
+import toast from "react-hot-toast";
 
 const Signup = () => {
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [age, setAge] = useState("")
-  const [phone, setPhone] = useState("")
-  const [password, setPassword] = useState("")
+  
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    age: "",
+    phone: "",
+    password: ""
+  });
+
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const HandleSignup = async () => {
 
-      await axios.post("http://localhost:3000/user/register", {
-        name,
-        email,
-        age,
-        phone,
-        password
-      },
-    {
-      withCredentials : true
-    }).then((res) => {
-      console.log(res)
-    alert("Signup successful");
+  const handleChange = (e) => {
+    
+   
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSignup = async () => {
+    setLoading(true);
+    try {
+      await axios.post(
+        import.meta.env.VITE_REGISTER_URL,
+        formData,
+        { withCredentials: true }
+      );
+
+      toast.success("Signup successful");
       navigate("/dashboard");
-    }).catch((error) => {
-      console.log(error.response.data.message)
-      alert(error.response.data.message)
-    })
-  }
+
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    } finally {
+      setLoading(false);
+    }
+    
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
+    <div className="min-h-screen bg-gray-200 flex flex-col items-center justify-center">
 
       <h1 className="text-4xl font-bold mb-2">
         Register for <span className="text-blue-800">Lost & Found</span> Portal
@@ -59,32 +74,36 @@ const Signup = () => {
 
           <p className="font-semibold text-gray-500">Full name</p>
           <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
             className="border w-full p-2 mb-2 mt-2 rounded-xl border-orange-200 focus:outline-none 
              focus:ring-1 focus:ring-orange-200 focus:shadow-md"
           />
 
           <p className="font-semibold text-gray-500">Age</p>
           <input
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
+            name="age"
+            value={formData.age}
+            onChange={handleChange}
             className="border w-full p-2 mb-2 mt-2 rounded-xl border-orange-200 focus:outline-none 
              focus:ring-1 focus:ring-orange-200 focus:shadow-md"
           />
 
           <p className="font-semibold text-gray-500">Email Address</p>
           <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             className="border w-full p-2 mb-2 mt-2 rounded-xl border-orange-200 focus:outline-none 
              focus:ring-1 focus:ring-orange-200 focus:shadow-md"
           />
 
           <p className="font-semibold text-gray-500">Phone number</p>
           <input
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
             className="border w-full p-2 mb-2 mt-2 rounded-xl border-orange-200 focus:outline-none 
              focus:ring-1 focus:ring-orange-200 focus:shadow-md"
           />
@@ -92,15 +111,17 @@ const Signup = () => {
           <p className="font-semibold text-gray-500">Password</p>
           <input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
             className="border w-full p-2 mb-3 mt-2 rounded-xl border-orange-200 focus:outline-none 
              focus:ring-1 focus:ring-orange-400 focus:shadow-md"
           />
 
           <button
-            onClick={HandleSignup}
-            className="bg-orange-500 text-white w-full py-2 hover:bg-orange-600 active: bg-orange-700 active:scale-95 transition duration-150 rounded"
+            onClick={handleSignup}
+            disabled={loading}
+            className="bg-orange-500 text-white w-full py-2 hover:bg-orange-600 active:bg-orange-700 active:scale-95 transition duration-150 rounded"
           >
             Register
           </button>
@@ -116,6 +137,8 @@ const Signup = () => {
       </div>
     </div>
   );
-}
+  
+};
+
 
 export default Signup;
