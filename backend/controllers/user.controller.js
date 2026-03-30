@@ -2,7 +2,6 @@ import User from "../models/user.model.js";
 import bcrypt from "bcrypt";               
 import jwt from "jsonwebtoken";     
 
-
 export const registerUser = async ( req , res) => {
     try {
         const { name , email, age , phone , password } = req.body;
@@ -28,12 +27,12 @@ export const registerUser = async ( req , res) => {
         const user = await User.create({
             name,
             email,
-            age,
-            phone,
+            age: Number(age),      
+            phone: Number(phone),
             password : hashedPassword,
         })
 
-        const token = jwt.sign({  //create token
+        const token = jwt.sign({
             id : user._id,
         } , process.env.JWT_SECRET_KEY , {
             expiresIn : "1d"
@@ -41,11 +40,12 @@ export const registerUser = async ( req , res) => {
 
         res.cookie("userToken" , token)
 
-        return res.status(201).json({           //201 : created 
+        return res.status(201).json({
             message : "User created successfully!",
             user :{
                 id : user._id,
-                email : user.name,
+                name : user.name,
+                email : user.email,
             }
         })
     } catch (error){
@@ -75,7 +75,7 @@ export const loginUser = async ( req , res ) => {
             })
         }
 
-        const isPasswordCorrect = await bcrypt.compare(password , user.password) //compare password
+        const isPasswordCorrect = await bcrypt.compare(password , user.password)
 
         if(!isPasswordCorrect){
             return res.status(400).json({
@@ -83,7 +83,7 @@ export const loginUser = async ( req , res ) => {
             })
         }
 
-        const token = jwt.sign({  //create token
+        const token = jwt.sign({
             id : user._id,
         } , process.env.JWT_SECRET_KEY , {
             expiresIn : "1d"
@@ -145,27 +145,3 @@ export const userLogout = (req , res ) => {
         })
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

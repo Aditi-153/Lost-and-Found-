@@ -7,11 +7,11 @@ import adminRoute from "./routes/admin.routes.js";
 import reportRoute from "./routes/listing.routes.js"
 const cors = require('cors')
 
-
+dotenv.config();
 mongoose.connect(process.env.MONGO_URL || "mongodb://127.0.0.1:27017/lost-and-found")
 .then(() => console.log("Connected to MongoDB"))
 .catch((err) => console.log(err));
-dotenv.config();
+
 
 const app = express();
 const corsOptions = {
