@@ -36,7 +36,7 @@ const Login = () => {
         { withCredentials: true },
       );
 
-      navigate("/dashboard");
+      navigate("/home");
     } catch (error) {
      toast.error(error?.response?.data?.message);
     } finally {
@@ -45,7 +45,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-200 flex flex-col items-center justify-center">
+    <div className="min-h-screen bg-gray-200  flex  flex-col items-center justify-center">
       <h1 className="text-4xl font-bold mb-4">
         Login for <span className="text-blue-800">Lost & Found</span> Portal
       </h1>
@@ -91,7 +91,7 @@ const Login = () => {
             onClick={() => {
               toast.promise(handleLogin(), {
                 loading: "Loading",
-                success: "Logged in",
+                // success: "Logged in",
                 error: (error) => `${error?.response?.data?.message}`,
               });
             }}

@@ -18,8 +18,6 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    
-   
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -31,19 +29,23 @@ const Signup = () => {
     try {
       await axios.post(
         import.meta.env.VITE_REGISTER_URL,
-        formData,
+        {
+          ...formData,
+          
+        },
         { withCredentials: true }
       );
 
       toast.success("Signup successful");
-      navigate("/dashboard");
+      navigate("/home");
 
     } catch (error) {
-      toast.error(error?.response?.data?.message);
+      toast.error(
+        error?.response?.data?.message || "Something went wrong"
+      );
     } finally {
       setLoading(false);
     }
-    
   };
 
   return (
@@ -137,8 +139,6 @@ const Signup = () => {
       </div>
     </div>
   );
-  
 };
-
 
 export default Signup;
