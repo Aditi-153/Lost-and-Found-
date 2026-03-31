@@ -4,7 +4,7 @@ export const listingSchema = new mongoose.Schema({
     location : {
         type : String ,
         required : true,
-        enum : [ "canteen", "library" , "classroom" ,"parking" , "campus" ]
+        enum : [ "canteen", "library" , "classroom" ,"parking" ,"washroom","campus" ]
     },
     description : {
         type : String ,
