@@ -18,28 +18,35 @@ const Home = () => {
         />
 
         <Card
-          icon={Camera }
-          title={"Quick report"}
-          des={"Report items instantly"}
-          classes={"top-30 left-16"}
+          icon={Camera}
+          title="Quick report"
+          des="Report items instantly"
+          classes="top-30 left-16"
+          animation="animate-[float_7s_ease-in-out_infinite]"
         />
+
         <Card
           icon={Check}
-          title={"Verified"}
-          des={"Secure matching"}
-          classes={"top-[360px] left-[120px]"}
+          title="Verified"
+          des="Secure matching"
+          classes="top-[360px] left-[120px]"
+          animation="animate-[float_8s_ease-in-out_infinite_reverse]"
         />
+
         <Card
           icon={Search}
-          title={"Smart Search"}
-          des={"Find Lost items fast "}
-          classes={"top-30 right-16"}
+          title="Smart Search"
+          des="Find Lost items fast"
+          classes="top-30 right-16"
+          animation="animate-[float_7s_ease-in-out_infinite]"
         />
+
         <Card
           icon={Bell}
-          title={"AI based match"}
-          des={"show info only if matched"}
-          classes={"top-[360px] right-[120px]"}
+          title="AI based match"
+          des="show info only if matched"
+          classes="top-[360px] right-[120px]"
+          animation="animate-[float_9s_ease-in-out_infinite_reverse]"
         />
       </div>
     </div>

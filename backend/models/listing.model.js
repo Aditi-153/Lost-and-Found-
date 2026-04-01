@@ -11,8 +11,8 @@ export const listingSchema = new mongoose.Schema({
         required : true
     },
 
-    descriptionArr : {  //to flter keywords from description
-        type : Array
+    descriptionArr : {  
+        type : [String]
     },
 
     imageUrl : {

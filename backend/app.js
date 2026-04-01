@@ -6,6 +6,7 @@ import userRoute from "./routes/user.routes.js";
 import adminRoute from "./routes/admin.routes.js";
 import reportRoute from "./routes/listing.routes.js"
 const cors = require('cors')
+const multer = require('multer');
 
 dotenv.config();
 mongoose.connect(process.env.MONGO_URL || "mongodb://127.0.0.1:27017/lost-and-found")
