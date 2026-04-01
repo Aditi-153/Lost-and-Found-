@@ -86,30 +86,42 @@ export const reportFoundItem = async (req, res) => {
 };
 
 
-// export const matchItem = async (req, res) => {
-//   try {
-//     const { location, descriptionArr } = req.body;
+export const matchItem = async (req, res) => {
+  try {
+    const { location, description } = req.body;
 
-//     if (!location || !descriptionArr) {
-//       return res.status(400).json({ 
-//         message: "location and descriptionArr required" 
-//       });
-//     }
+    if (!location || !description) {
+      return res.status(400).json({
+        message: "Location and description are required",
+      });
+    }
 
-//     const foundItems = await Listing.find({ 
-//       status: "found",
-//       location : location , 
-//       descriptionArr
-//     });  
-//     return res.status(200).json({
-//       message: "Matching results",
-//     });
+   
+    const searchKeywords = keyword_extractor.extract(description, {
+      language: "english",
+      remove_digits: true,
+      return_changed_case: true,
+      remove_duplicates: true,
+    });
 
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(500).json({
-//       message: "failed to match item",
-//       error: error.message,
-//     });
-//   }
-// };
+   
+    const matchedItems = await Listing.find({
+      location: location,
+      status: "found",
+      descriptionArr: { $in: searchKeywords }, 
+    });
+
+    return res.status(200).json({
+      message: "Matching items fetched successfully",
+      totalMatches: matchedItems.length,
+      matches: matchedItems,
+    });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Failed to match items",
+      error: error.message,
+    });
+  }
+};
