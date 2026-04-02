@@ -7,7 +7,7 @@ const router = express.Router();
 
 //  http://localhost:3000/user/...
 router.post("/register" , registerUser);
-router.post("/login" , userAuth , loginUser);
+router.post("/login" , loginUser);
 router.get("/logout" , userAuth , userLogout);
 router.get("/profile" , userAuth , userProfile);
 

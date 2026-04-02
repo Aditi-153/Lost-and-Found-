@@ -5,15 +5,15 @@ import jwt from "jsonwebtoken"
 
 export const userAuth = async ( req , res, next ) => {
     try {
-        const token = req.cookies.userToken;  //get token
+        const token = req.cookies.userToken;  
 
-        if(!token){    // validate token 
+        if(!token){   
             return res.status(400).json({
                 message : "please log in first"
             })
         }
 
-        const decoded = jwt.verify(token , process.env.JWT_SECRET_KEY);  //check token valid or not 
+        const decoded = jwt.verify(token , process.env.JWT_SECRET_KEY);   
 
         if(!decoded){
             return res.status(400).json({
@@ -21,7 +21,7 @@ export const userAuth = async ( req , res, next ) => {
             })
         }
 
-        const user = await User.findById(decoded.id) //fetch user from db 
+        const user = await User.findById(decoded.id)  
 
         if(!user){
             return res.status(400).json({
@@ -29,12 +29,12 @@ export const userAuth = async ( req , res, next ) => {
             })
         }
 
-        req.user = {       //attach user to request
+        req.user = {      
             id : user._id,
             email : user.email  
         }
 
-        return next();         // allow to proceed to actual api
+        return next();       
 
     } catch(err){
         return res.status(500).json({

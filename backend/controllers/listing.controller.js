@@ -31,6 +31,7 @@ export const reportLostItem = async (req, res) => {
       message: "Lost report created successfully",
       lostItem,
     });
+    
 
   } catch (error) {
     return res.status(500).json({
@@ -70,6 +71,7 @@ export const reportFoundItem = async (req, res) => {
       message: "Found report created successfully",
       foundItem,
     });
+    
 
   } catch (error) {
     return res.status(500).json({
