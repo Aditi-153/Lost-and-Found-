@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 const Found = () => {
   const [location, setLocation] = useState("");
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({                                            
     title: "",
     description: "",
     img: "",
@@ -39,18 +39,17 @@ const Found = () => {
       data.append("location", formData.location);
       data.append("image", formData.img);
 
-      if (!formData.img) {
-        toast.error("Please upload an image");
-        setLoading(false);
-        return;
-      }
-
       await axios.post(import.meta.env.VITE_REPORT_FOUND_URL, data, {
         withCredentials: true,
       });
 
       toast.success("report found item successful");
       navigate("/home");
+      if (!formData.img) {
+        toast.error("Please upload an image");
+        setLoading(false);
+        return;
+      }
     } catch (error) {
       toast.error(error?.response?.data?.message || "Something went wrong");
     } finally {

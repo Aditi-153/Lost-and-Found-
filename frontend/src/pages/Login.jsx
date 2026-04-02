@@ -11,6 +11,7 @@ const Login = () => {
   })
 
   const navigate = useNavigate();
+  
 
   const handleChange =(e) => {
     setFormData( {
@@ -35,7 +36,7 @@ const Login = () => {
         { email, password },
         { withCredentials: true },
       );
-
+      toast.success("Login successful");
       navigate("/home");
     } catch (error) {
      toast.error(error?.response?.data?.message);
