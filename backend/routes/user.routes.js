@@ -8,7 +8,7 @@ const router = express.Router();
 //  http://localhost:3000/user/...
 router.post("/register" , registerUser);
 router.post("/login" , loginUser);
-router.get("/logout" , userAuth , userLogout);
+router.get("/logout" , userLogout);
 router.get("/profile" , userAuth , userProfile);
 
 export default router;  
