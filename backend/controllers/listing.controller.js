@@ -3,10 +3,10 @@ import keyword_extractor from "keyword-extractor";
 
 export const reportLostItem = async (req, res) => {
   try {
-    const { location, description } = req.body;
+    const { location, description, title } = req.body;
     const imageUrl = req.file?.path;
 
-    if (!location || !description || !req.file) {
+    if (!title || !location || !description || !req.file) {
       return res.status(400).json({
         message: "All fields are required",
       });
@@ -20,19 +20,19 @@ export const reportLostItem = async (req, res) => {
     });
 
     const lostItem = await Listing.create({
+      title,
       location,
       description,
       imageUrl,
       descriptionArr: lostKeyword,
       status: "lost",
+      owner: req.user._id,
     });
 
     return res.status(201).json({
       message: "Lost report created successfully",
       lostItem,
     });
-    
-
   } catch (error) {
     return res.status(500).json({
       message: "Failed to report lost item",
@@ -43,10 +43,10 @@ export const reportLostItem = async (req, res) => {
 
 export const reportFoundItem = async (req, res) => {
   try {
-    const { location, description } = req.body;
+    const { location, description, title } = req.body;
     const imageUrl = req.file?.path;
 
-    if (!location || !description || !req.file) {
+    if (!title || !location || !description || !req.file) {
       return res.status(400).json({
         message: "All fields are required",
       });
@@ -60,24 +60,39 @@ export const reportFoundItem = async (req, res) => {
     });
 
     const foundItem = await Listing.create({
+      title,
       location,
       description,
       imageUrl,
       descriptionArr: foundKeyword,
       status: "found",
+      owner: req.user._id,
     });
 
     return res.status(201).json({
       message: "Found report created successfully",
       foundItem,
     });
-    
-
   } catch (error) {
     return res.status(500).json({
       message: "Failed to report found item",
       error: error.message,
     });
+  }
+};
+
+export const getItems = async (req, res) => {
+  try {
+    const items = await Listing.find({
+      owner: req.user._id,
+    });
+
+    const lost = items.filter((item) => item.status === "lost");
+    const found = items.filter((item) => item.status === "found");
+
+    res.json({ lost, found });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -100,7 +115,7 @@ export const matchItem = async (req, res) => {
 
     const matchedItems = await Listing.find({
       location: location,
-      status: "found", // still needed for filtering
+      status: "found",
       descriptionArr: { $in: searchKeywords },
     });
 
@@ -109,7 +124,6 @@ export const matchItem = async (req, res) => {
       totalMatches: matchedItems.length,
       matches: matchedItems,
     });
-
   } catch (error) {
     console.log(error);
     return res.status(500).json({

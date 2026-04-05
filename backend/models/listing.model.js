@@ -1,39 +1,46 @@
 import mongoose from "mongoose";
 
 export const listingSchema = new mongoose.Schema({
-    location : {
-        type : String ,
-        required : true,
-        enum : [ "canteen", "library" , "classroom" ,"parking" ,"washroom","campus" ]
-    },
-    description : {
-        type : String ,
-        required : true
-    },
+  title: {
+    type: String,
+    required: true,
+  },
+  location: {
+    type: String,
+    required: true,
+    enum: ["canteen", "library", "classroom", "parking", "washroom", "campus"],
+  },
 
-    descriptionArr : {  
-        type : [String]
-    },
+  description: {
+    type: String,
+    required: true,
+  },
 
-    imageUrl : {
-        type : String,
-        required : true
-    },
+  descriptionArr: {
+    type: [String],
+  },
 
-    status : {
-        type : String ,
-        enum :["lost" , "found" ]
-    },
+  imageUrl: {
+    type: String,
+    required: true,
+  },
 
-    createdAt : {
-        type : Date,
-        default : Date.now
-    },
+  status: {
+    type: String,
+    enum: ["lost", "found"],
+    required: true,
+  },
 
-    owner : [{ 
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    }], 
-} )
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 
-export default mongoose.model("Listing" , listingSchema);
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+});
+
+export default mongoose.model("Listing", listingSchema);

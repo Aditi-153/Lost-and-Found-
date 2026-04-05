@@ -1,5 +1,5 @@
 import express from "express";
-import { registerUser , loginUser , userLogout } from "../controllers/user.controller.js";
+import { registerUser , loginUser , userLogout} from "../controllers/user.controller.js";
 import { userAuth } from "../middlewares/user.auth.js";
 import { userProfile } from "../controllers/user.controller.js";
 
@@ -10,5 +10,6 @@ router.post("/register" , registerUser);
 router.post("/login" , loginUser);
 router.get("/logout" , userLogout);
 router.get("/profile" , userAuth , userProfile);
+
 
 export default router;  
