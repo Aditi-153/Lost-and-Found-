@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 const Found = () => {
   const [location, setLocation] = useState("");
 
-  const [formData, setFormData] = useState({                                            
+  const [formData, setFormData] = useState({
     title: "",
     description: "",
     img: "",
@@ -29,6 +29,11 @@ const Found = () => {
   };
 
   const handleFound = async () => {
+    if (!formData.img) {
+      toast.error("Please upload an image");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -45,11 +50,6 @@ const Found = () => {
 
       toast.success("report found item successful");
       navigate("/home");
-      if (!formData.img) {
-        toast.error("Please upload an image");
-        setLoading(false);
-        return;
-      }
     } catch (error) {
       toast.error(error?.response?.data?.message || "Something went wrong");
     } finally {

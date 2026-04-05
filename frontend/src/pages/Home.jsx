@@ -1,15 +1,19 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom"; // ✅ added
 import { Bell, Camera, Check, Search } from "lucide-react";
 import Card from "../components/Card";
 import Hero from "./Hero";
 import Navbar from "../components/Navbar";
 
 const Home = () => {
+  const location = useLocation(); // ✅ get data
+  const matches = location.state?.matches || []; // ✅ matches
+
   return (
-    <div className="h-screen bg-gray-200 relative">
+    <div className="min-h-screen bg-gray-200 relative">
       <Navbar />
 
+      {/* HERO SECTION */}
       <div className="flex flex-col items-center justify-center relative">
         <Hero
           h1="Lost, Report, and Find"
@@ -24,7 +28,6 @@ const Home = () => {
           classes="top-30 left-16"
           animation="animate-[float_7s_ease-in-out_infinite]"
         />
-
         <Card
           icon={Check}
           title="Verified"
@@ -32,7 +35,6 @@ const Home = () => {
           classes="top-[360px] left-[120px]"
           animation="animate-[float_8s_ease-in-out_infinite_reverse]"
         />
-
         <Card
           icon={Search}
           title="Smart Search"
@@ -40,7 +42,6 @@ const Home = () => {
           classes="top-30 right-16"
           animation="animate-[float_7s_ease-in-out_infinite]"
         />
-
         <Card
           icon={Bell}
           title="AI based match"

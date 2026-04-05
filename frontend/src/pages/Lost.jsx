@@ -12,6 +12,7 @@ const Lost = () => {
   const [location, setLocation] = useState("");
 
   const [formData, setFormData] = useState({
+    title: "",
     description: "",
     img: "",
     location: "",
@@ -28,26 +29,44 @@ const Lost = () => {
   };
 
   const handleLost = async () => {
+    if (!formData.img) {
+      toast.error("Please upload an image");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const data = new FormData();
 
+      data.append("title", formData.title);
       data.append("description", formData.description);
       data.append("location", formData.location);
       data.append("image", formData.img);
 
-      await axios.post(import.meta.env.VITE_LOST_FOUND_URL, data, {
+      await axios.post(import.meta.env.VITE_REPORT_LOST_URL, data, {
         withCredentials: true,
       });
 
       toast.success("report lost item successful");
-      navigate("/home");
-      if (!formData.img) {
-        toast.error("Please upload an image");
-        setLoading(false);
-        return;
-      }
+
+      const res = await axios.post(
+        import.meta.env.VITE_MATCH_URL,
+        {
+          location: formData.location,
+          description: formData.description,
+        },
+        { withCredentials: true },
+      );
+
+      console.log(res.data.matches);
+
+      navigate("/search", {
+        state: {
+          location: formData.location,
+          description: formData.description,
+        },
+      });
     } catch (error) {
       toast.error(error?.response?.data?.message || "Something went wrong");
     } finally {
@@ -67,6 +86,17 @@ const Lost = () => {
             Describe what you lost clearly , our AI will check the database for
             matches
           </p>
+
+          <h3 className="font-bold text-gray-700 mt-2">
+            Title <span className="text-red-500">*</span>
+          </h3>
+          <textarea
+            placeholder="eg. blue waterbottle"
+            onChange={handleChange}
+            name="title"
+            className="border w-full p-2 mb-3 mt-2 rounded-xl border-blue-100 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:shadow-xl"
+            value={formData.title}
+          />
 
           <h3 className="font-bold text-gray-700 mt-2">
             Description <span className="text-red-500">*</span>
