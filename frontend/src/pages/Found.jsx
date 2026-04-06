@@ -42,7 +42,7 @@ const Found = () => {
       data.append("title", formData.title);
       data.append("description", formData.description);
       data.append("location", formData.location);
-      data.append("image", formData.img);
+      data.append("file", formData.img); 
 
       await axios.post(import.meta.env.VITE_REPORT_FOUND_URL, data, {
         withCredentials: true,
@@ -60,7 +60,7 @@ const Found = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gray-100 relative flex items-center justify-center">
+      <div className="min-h-screen bg-gray-200 relative flex items-center justify-center">
         <div className="bg-white w-full max-w-xl p-8 rounded-2xl shadow-lg">
           <h2 className="text-center text-3xl font-bold mb-3">
             Report a Found Items

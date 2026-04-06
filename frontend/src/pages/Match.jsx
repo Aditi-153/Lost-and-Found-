@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 
-const Search = () => {
+const Match = () => {
   const [matches, setMatches] = useState([]);
 
   const locationData = useLocation();
@@ -18,7 +18,7 @@ const Search = () => {
             location,
             description,
           },
-          { withCredentials: true }
+          { withCredentials: true },
         );
 
         setMatches(res.data.matches || []);
@@ -31,7 +31,6 @@ const Search = () => {
       fetchMatches();
     }
   }, [location, description]);
-
 
   if (!location || !description) {
     return (
@@ -52,9 +51,7 @@ const Search = () => {
         </h1>
 
         {matches.length === 0 && (
-          <p className="text-center text-gray-500">
-            No matching items found
-          </p>
+          <p className="text-center text-gray-500">No matching items found</p>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -73,12 +70,10 @@ const Search = () => {
 
               <div className="p-4">
                 <h2 className="font-bold">{item.location}</h2>
-                <p className="text-sm text-gray-500">
-                  {item.description}
-                </p>
+                <p className="text-sm text-gray-500">{item.description}</p>
 
                 <p className="text-xs text-gray-400 mt-2">
-                 {new Date(item.createdAt).toLocaleDateString()}
+                  {new Date(item.createdAt).toLocaleDateString()}
                 </p>
               </div>
             </div>
@@ -89,4 +84,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default Match;

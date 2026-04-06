@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import Found from "./pages/Found";
 import Lost from "./pages/Lost";
 import Report from "./pages/Report";
-import Search from "./pages/Search";
+import Match from "./pages/Match";
 
 function App() {
   return (
@@ -18,9 +18,8 @@ function App() {
         <Route path="/found" element={<Found />}></Route>
         <Route path="/lost" element={<Lost />}></Route>
         <Route path="/checkReport" element={<Report />}></Route>
-       <Route path="/search" element={<Search />} />
+       <Route path="/match" element={<Match  />} />
 
-<Route path="/search" element={<Search />} />
       </Routes>
 
       <Toaster position="top-center" reverseOrder={false} />

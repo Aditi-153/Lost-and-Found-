@@ -4,13 +4,12 @@ import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const Signup = () => {
-  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     age: "",
     phone: "",
-    password: ""
+    password: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -20,29 +19,27 @@ const Signup = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
-
   const handleSignup = async () => {
     setLoading(true);
     try {
-      await axios.post(
+      const res = await axios.post(
         import.meta.env.VITE_REGISTER_URL,
         {
           ...formData,
-          
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
+
+   
+      localStorage.setItem("user", JSON.stringify(res.data.user));
 
       toast.success("Signup successful");
       navigate("/home");
-
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message || "Something went wrong"
-      );
+      toast.error(error?.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -50,7 +47,6 @@ const Signup = () => {
 
   return (
     <div className="min-h-screen bg-gray-200 flex flex-col items-center justify-center">
-
       <h1 className="text-4xl font-bold mb-2">
         Register for <span className="text-blue-800">Lost & Found</span> Portal
       </h1>
@@ -60,7 +56,6 @@ const Signup = () => {
       </p>
 
       <div className="bg-white shadow-xl rounded-3xl flex p-6 w-[800px]">
-
         <div className="w-1/2 flex items-center justify-center">
           <img
             src="/loginRegisterImage/signup-img.jpeg"
@@ -135,7 +130,6 @@ const Signup = () => {
             </Link>
           </p>
         </div>
-
       </div>
     </div>
   );

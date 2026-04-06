@@ -1,45 +1,76 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-// import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const name = user?.name ?? "User";
 
   const handleLogout = async () => {
     try {
-      const User = await axios.get(import.meta.env.VITE_LOGOUT_URL, {
+      await axios.get(import.meta.env.VITE_LOGOUT_URL, {
         withCredentials: true,
       });
-      
+
       toast.success("Logged out successfully");
       navigate("/login");
-    } catch (error) {
-      toast.error(error.message, "Logout failed");
-      return 
+    } catch {
+      toast.error("Logout failed");
     }
   };
 
   return (
-    <nav className="flex items-center justify-between px-10 py-4  bg-white ">
+    <nav className="flex items-center justify-between px-10 py-4 bg-white">
       <h1 className="text-xl font-bold text-blue-800">LoFo</h1>
 
-      <div className="flex gap-10 text-black-300 font-medium">
+      <div className="flex gap-10 font-medium">
         <Link to="/home">Home</Link>
-        <Link to="/found">found</Link>
-        <Link to="/lost">lost</Link>
-        <Link to="/checkReport">Check Reports</Link>
+        <Link to="/found">Found</Link>
+        <Link to="/lost">Lost</Link>
       </div>
-      <button
-        onClick={handleLogout}
-        className="bg-red-500 text-white px-4 py-2 rounded-md"
-      >
-        Logout
-      </button>
+
+      <div className="relative">
+        <div
+          onClick={() => {
+            setOpen(!open);
+          }}
+          className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold cursor-pointer hover:scale-110 transition"
+        >
+          {name[0].toUpperCase()}
+        </div>
+
+        {open && (
+          <>
+            <div onClick={() => setOpen(false)} className="fixed inset-0"></div>
+
+            <div className="absolute right-0 mt-5 w-44 bg-white shadow-xl rounded-lg z-10 border border-gray-200">
+              
+              <div className="px-4 py-2 font-semibold text-gray-700 border-b">
+                {name}
+              </div>
+
+              <Link
+                to="/checkReport"
+                className="block px-4 py-2 hover:bg-blue-100 cursor-pointer"
+              >
+                Check Reports
+              </Link>
+
+              <div
+                onClick={handleLogout}
+                className="px-4 py-2 hover:bg-red-100 text-red-500 cursor-pointer"
+              >
+                Logout
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     </nav>
   );
-}
+};
 
 export default Navbar;

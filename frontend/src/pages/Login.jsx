@@ -5,20 +5,19 @@ import toast from "react-hot-toast";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
-  const [formData , setFormData ] = useState({
-    email : "",
-    password :""
-  })
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
   const navigate = useNavigate();
-  
 
-  const handleChange =(e) => {
-    setFormData( {
+  const handleChange = (e) => {
+    setFormData({
       ...formData,
-      [e.target.name] : e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleLogin = async () => {
     const { email, password } = formData;
@@ -31,15 +30,19 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await axios.post(
+      const res = await axios.post(
         import.meta.env.VITE_LOGIN_URL,
         { email, password },
         { withCredentials: true },
       );
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      console.log(res.data);
+
       toast.success("Login successful");
       navigate("/home");
     } catch (error) {
-     toast.error(error?.response?.data?.message);
+      toast.error(error?.response?.data?.message);
     } finally {
       setLoading(false);
     }

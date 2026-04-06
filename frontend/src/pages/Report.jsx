@@ -29,9 +29,9 @@ const Report = () => {
     fetchItems();
   }, []);
   return (
-    <>
+    <div className="bg-gray-100 min-h-screen pb-10">
       <Navbar />
-
+    <div className=""></div>
       <div className="max-w-5xl mx-auto mt-10 px-4 space-y-6">
         <div className="bg-white p-6 rounded-xl shadow">
           <h1 className="text-2xl font-bold">Welcome, {name || "User"}!</h1>
@@ -59,7 +59,7 @@ const Report = () => {
           </div>
         </div>
 
-        {/* Tabs */}
+      
         <div className="bg-white p-4 rounded-xl shadow flex gap-2">
           <button
             onClick={() => setActiveTab("lost")}
@@ -80,7 +80,7 @@ const Report = () => {
           </button>
         </div>
 
-        {/* Items */}
+        
         {activeTab === "lost" && lostItems.length === 0 && (
           <div className="bg-white p-6 rounded-xl shadow text-center">
             No lost items found
@@ -94,7 +94,7 @@ const Report = () => {
         )}
 
         <div className="grid grid-cols-3 gap-6">
-          {/* LOST */}
+         
           {activeTab === "lost" &&
             lostItems.map((item) => (
               <div
@@ -117,7 +117,7 @@ const Report = () => {
               </div>
             ))}
 
-          {/* FOUND */}
+       
           {activeTab === "found" &&
             foundItems.map((item) => (
               <div
@@ -125,7 +125,7 @@ const Report = () => {
                 className="bg-white rounded-xl shadow overflow-hidden"
               >
                 <img
-                  src={item.imageUrl || "https://via.placeholder.com/150"}
+                  src={item.imageUrl}
                   alt="found item"
                   className="w-full h-40 object-cover"
                 />
@@ -137,7 +137,10 @@ const Report = () => {
             ))}
         </div>
       </div>
-    </>
+    </div>
+
+      
+    
   );
 };
 

@@ -1,19 +1,18 @@
 import React from "react";
-import { useLocation } from "react-router-dom"; // ✅ added
 import { Bell, Camera, Check, Search } from "lucide-react";
 import Card from "../components/Card";
 import Hero from "./Hero";
 import Navbar from "../components/Navbar";
 
 const Home = () => {
-  const location = useLocation(); // ✅ get data
-  const matches = location.state?.matches || []; // ✅ matches
+  
+  
 
   return (
     <div className="min-h-screen bg-gray-200 relative">
       <Navbar />
 
-      {/* HERO SECTION */}
+     
       <div className="flex flex-col items-center justify-center relative">
         <Hero
           h1="Lost, Report, and Find"
