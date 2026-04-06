@@ -80,7 +80,7 @@ const Report = () => {
           </button>
         </div>
 
-        
+      
         {activeTab === "lost" && lostItems.length === 0 && (
           <div className="bg-white p-6 rounded-xl shadow text-center">
             No lost items found
@@ -117,7 +117,7 @@ const Report = () => {
               </div>
             ))}
 
-       
+          
           {activeTab === "found" &&
             foundItems.map((item) => (
               <div
