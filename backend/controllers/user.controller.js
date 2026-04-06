@@ -101,8 +101,11 @@ export const loginUser = async (req, res) => {
     res.status(200).json({
       message: "Login successfully",
       token,
-      id: user._id,
-      email: user.email,
+      user: {
+        name: user.name,
+        id: user._id,
+        email: user.email,
+      },
     });
   } catch (error) {
     return res.status(500).json({
@@ -111,8 +114,6 @@ export const loginUser = async (req, res) => {
     });
   }
 };
-
-
 
 export const userProfile = async (req, res) => {
   try {
@@ -138,11 +139,10 @@ export const userProfile = async (req, res) => {
   }
 };
 
-
 export const userLogout = (req, res) => {
   try {
     const token = res.clearCookie("userToken");
-    
+
     return res.status(200).json({
       message: "Logout successfully",
     });
@@ -154,7 +154,3 @@ export const userLogout = (req, res) => {
     });
   }
 };
-
-
-
-
