@@ -1,13 +1,19 @@
 import multer from "multer";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
-import cloudinary from "./cloudinary.js"; 
+import cloudinary from "./cloudinary.js";
 
 const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
+  cloudinary,
+  params: async (req, file) => ({
     folder: "lost-found",
-    allowed_formats: ["jpg", "png", "jpeg"],
-  },
+    resource_type: "image",
+  }),
 });
 
-export const upload = multer({ storage });
+// 🔥 IMPORTANT: explicitly disable fileFilter
+export const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    cb(null, true); // allow ALL files (no rejection)
+  },
+});

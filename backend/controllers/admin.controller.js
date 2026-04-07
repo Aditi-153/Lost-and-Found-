@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import Listing from "../models/listing.model.js";
 import User from "../models/user.model.js";
 
-
 export const adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -17,28 +16,32 @@ export const adminLogin = async (req, res) => {
 
     const admin = await Admin.findOne({ email });
 
-    if (!admin)
+    if (!admin) {
       return res.status(400).json({
-        message: "admin does not exist",
+        message: "Admin does not exist",
       });
-
-    if(password !== admin.password){
-        return res.status(400).json({
-            message : "Incorrect password"
-        })
     }
 
+   
+    if (password !== admin.password) {
+      return res.status(400).json({
+        message: "Incorrect password",
+      });
+    }
+
+  
     const token = jwt.sign(
-      {
-        id: admin._id,
-      },
+      { id: admin._id },
       process.env.ADMIN_SECRET_KEY,
-      {
-        expiresIn: "1d",
-      },
+      { expiresIn: "1d" }
     );
 
-    res.cookie("adminToken", token);
+
+    res.cookie("adminToken", token, {
+      httpOnly: true,
+      secure: false, 
+      sameSite: "strict",
+    });
 
     res.status(200).json({
       message: "Login successfully",
@@ -46,7 +49,7 @@ export const adminLogin = async (req, res) => {
       id: admin._id,
       email: admin.email,
     });
-    
+
   } catch (error) {
     return res.status(500).json({
       message: "Login failed",
@@ -55,37 +58,41 @@ export const adminLogin = async (req, res) => {
   }
 };
 
-
-
 export const filterListings = async (req, res) => {
   try {
-    const { stDate , endDate , status , location } = req.query; 
+    const { stDate, endDate, status, location, type, category } = req.query;
 
     const filter = {};
 
-    if(stDate && endDate){
+    if (stDate && endDate) {
       filter.createdAt = {
-        $gte : new Date(stDate),
-        $lte : new Date(endDate)
-      }
+        $gte: new Date(stDate),
+        $lte: new Date(endDate),
+      };
     }
 
-    if(status) {
+    if (status) {
       filter.status = status;
     }
 
-    if(location){
-      filter.location = location;
+    if (location) {
+      filter.location = { $regex: location, $options: "i" };
+    }
+
+    if (type) {
+      filter.type = type;
+    }
+
+    if (category) {
+      filter.category = category;
     }
 
     const userListing = await Listing.find(filter);
 
     res.status(200).json({
       message: "listings fetched successfully",
-      status,
       userListing,
     });
-    
   } catch (error) {
     res.status(500).json({
       message: "Failed to fetch listings",
@@ -94,40 +101,45 @@ export const filterListings = async (req, res) => {
   }
 };
 
-export const blockUser = async ( req , res ) => {
+export const blockUser = async (req, res) => {
   try {
-
     const { userId } = req.body;
-    
-  } catch(error){
-    message : "failed to block user";
-    error : error.message
-  }
-}
-export const adminLogout = ( req , res ) => {
-  try {
-    res.clearCookie("adminToken");
-    return res.status(200).json({
-      message : "Logout successfully"
-    })
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { isBlocked: true },
+      { new: true },
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "User blocked successfully",
+      user,
+    });
   } catch (error) {
     return res.status(500).json({
-      message : "Logout failed",
-      error : error.message
-    })
+      message: "failed to block user",
+      error: error.message,
+    });
   }
-}     
+};
 
+export const adminLogout = (req, res) => {
+  try {
+    res.clearCookie("adminToken");
 
-
-
-
-
-
-
-
-
-
-
-
-
+    return res.status(200).json({
+      message: "Logout successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Logout failed",
+      error: error.message,
+    });
+  }
+};

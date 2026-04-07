@@ -6,6 +6,13 @@ export const reportLostItem = async (req, res) => {
     const { location, description, title } = req.body;
     const imageUrl = req.file?.path;
 
+    // ✅ FIX 1: Check user FIRST
+    if (!req.user) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
     if (!title || !location || !description || !req.file) {
       return res.status(400).json({
         message: "All fields are required",
@@ -34,6 +41,8 @@ export const reportLostItem = async (req, res) => {
       lostItem,
     });
   } catch (error) {
+    console.error("ERROR:", error); // ✅ FIX 2: Proper logging
+
     return res.status(500).json({
       message: "Failed to report lost item",
       error: error.message,
@@ -44,7 +53,14 @@ export const reportLostItem = async (req, res) => {
 export const reportFoundItem = async (req, res) => {
   try {
     const { location, description, title } = req.body;
-    const imageUrl = req.file?.path;
+    const imageUrl = req.file?.path || req.file?.secure_url;
+
+    // ✅ FIX 1: Same here
+    if (!req.user) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
 
     if (!title || !location || !description || !req.file) {
       return res.status(400).json({
@@ -74,6 +90,8 @@ export const reportFoundItem = async (req, res) => {
       foundItem,
     });
   } catch (error) {
+    console.error("ERROR:", error); // ✅ FIX 2
+
     return res.status(500).json({
       message: "Failed to report found item",
       error: error.message,
@@ -92,6 +110,8 @@ export const getItems = async (req, res) => {
 
     res.json({ lost, found });
   } catch (error) {
+    console.error("ERROR:", error); // ✅ added
+
     res.status(500).json({ message: error.message });
   }
 };
@@ -125,7 +145,8 @@ export const matchItem = async (req, res) => {
       matches: matchedItems,
     });
   } catch (error) {
-    console.log(error);
+    console.error("ERROR:", error); // ✅ better log
+
     return res.status(500).json({
       message: "Failed to match items",
       error: error.message,

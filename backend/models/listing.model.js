@@ -31,6 +31,17 @@ export const listingSchema = new mongoose.Schema({
     required: true,
   },
 
+  isMatched: {
+    type: Boolean,
+    default: false,
+  },
+
+  matchedWith: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Listing",
+    default: null,
+  },
+
   createdAt: {
     type: Date,
     default: Date.now,
