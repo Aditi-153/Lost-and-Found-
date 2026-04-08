@@ -5,9 +5,6 @@ import Hero from "./Hero";
 import Navbar from "../components/Navbar";
 
 const Home = () => {
-  
-  
-
   return (
     <div className="min-h-screen bg-gray-200 relative">
       <Navbar />

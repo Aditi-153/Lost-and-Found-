@@ -19,6 +19,7 @@ const Found = () => {
   });
 
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -29,6 +30,8 @@ const Found = () => {
   };
 
   const handleFound = async () => {
+    if (loading) return;
+
     if (!formData.img) {
       toast.error("Please upload an image");
       return;
@@ -42,7 +45,7 @@ const Found = () => {
       data.append("title", formData.title);
       data.append("description", formData.description);
       data.append("location", formData.location);
-      data.append("file", formData.img); 
+      data.append("image", formData.img);
 
       await axios.post(import.meta.env.VITE_REPORT_FOUND_URL, data, {
         withCredentials: true,

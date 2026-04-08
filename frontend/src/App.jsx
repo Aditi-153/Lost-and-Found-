@@ -7,6 +7,8 @@ import Found from "./pages/Found";
 import Lost from "./pages/Lost";
 import Report from "./pages/Report";
 import Match from "./pages/Match";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDash from "./pages/AdminDash";
 
 function App() {
   return (
@@ -18,7 +20,9 @@ function App() {
         <Route path="/found" element={<Found />}></Route>
         <Route path="/lost" element={<Lost />}></Route>
         <Route path="/checkReport" element={<Report />}></Route>
-       <Route path="/match" element={<Match  />} />
+       <Route path="/match" element={<Match />} />
+       <Route path="/admin/login" element={<AdminLogin />}></Route>
+       <Route path="/admin-dashboard" element={<AdminDash />}></Route>
 
       </Routes>
 

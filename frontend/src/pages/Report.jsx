@@ -6,9 +6,7 @@ const Report = () => {
   const [lostItems, setLostItems] = useState([]);
   const [foundItems, setFoundItems] = useState([]);
   const [activeTab, setActiveTab] = useState("lost");
-
-  const user = JSON.parse(localStorage.getItem("user") || "null");
-  const name = user?.name ?? "User";
+  
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -21,6 +19,8 @@ const Report = () => {
           setLostItems(res.data.lost || []);
           setFoundItems(res.data.found || []);
         }
+
+        
       } catch (err) {
         console.log(err);
       }
@@ -34,7 +34,7 @@ const Report = () => {
     <div className=""></div>
       <div className="max-w-5xl mx-auto mt-10 px-4 space-y-6">
         <div className="bg-white p-6 rounded-xl shadow">
-          <h1 className="text-2xl font-bold">Welcome, {name || "User"}!</h1>
+          <h1 className="text-2xl font-bold">Welcome, {name}!</h1>
           <p className="text-gray-500">
             Here's a summary of your reported items
           </p>

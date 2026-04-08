@@ -42,23 +42,23 @@ const Lost = () => {
       data.append("title", formData.title);
       data.append("description", formData.description);
       data.append("location", formData.location);
-      
-      data.append("file", formData.img);
+      data.append("image", formData.img);
 
-      await axios.post(import.meta.env.VITE_REPORT_LOST_URL, data, {
+      const res = await axios.post(import.meta.env.VITE_REPORT_LOST_URL, data, {
         withCredentials: true,
       });
 
-      toast.success("report lost item successful");
-
-      await axios.post(
-        import.meta.env.VITE_MATCH_URL,
-        {
-          location: formData.location,
-          description: formData.description,
-        },
-        { withCredentials: true },
-      );
+      if (res.status === 201) {
+        toast.success("report lost item successful");
+        await axios.post(
+          import.meta.env.VITE_MATCH_URL,
+          {
+            location: formData.location,
+            description: formData.description,
+          },
+          { withCredentials: true },
+        );
+      }
 
       navigate("/match", {
         state: {

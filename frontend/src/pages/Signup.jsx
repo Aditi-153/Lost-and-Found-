@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const Signup = () => {
@@ -14,7 +14,7 @@ const Signup = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
+  
 
   const handleChange = (e) => {
     setFormData({
@@ -25,7 +25,7 @@ const Signup = () => {
   const handleSignup = async () => {
     setLoading(true);
     try {
-      const res = await axios.post(
+      await axios.post(
         import.meta.env.VITE_REGISTER_URL,
         {
           ...formData,
@@ -33,11 +33,10 @@ const Signup = () => {
         { withCredentials: true },
       );
 
-   
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      
 
       toast.success("Signup successful");
-      navigate("/home");
+      window.location.href = "/home";
     } catch (error) {
       toast.error(error?.response?.data?.message || "Something went wrong");
     } finally {

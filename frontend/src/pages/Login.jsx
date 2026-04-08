@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import {  Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const Login = () => {
@@ -10,7 +10,6 @@ const Login = () => {
     password: "",
   });
 
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -35,12 +34,12 @@ const Login = () => {
         { email, password },
         { withCredentials: true },
       );
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      
 
-      console.log(res.data);
+     console.log(res.data.user);
 
       toast.success("Login successful");
-      navigate("/home");
+      window.location.href = "/home";
     } catch (error) {
       toast.error(error?.response?.data?.message);
     } finally {

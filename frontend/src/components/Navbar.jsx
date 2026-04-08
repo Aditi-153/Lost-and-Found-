@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect  } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -6,21 +6,37 @@ import toast from "react-hot-toast";
 const Navbar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user") || "null");
-  const name = user?.name ?? "User";
+  const [user, setUser] = useState(null);
+const name = user?.name ?? "User";
 
   const handleLogout = async () => {
     try {
       await axios.get(import.meta.env.VITE_LOGOUT_URL, {
         withCredentials: true,
       });
-
+      setUser(null); 
       toast.success("Logged out successfully");
       navigate("/login");
     } catch {
       toast.error("Logout failed");
     }
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get(import.meta.env.VITE_PROFILE_URL,
+          { withCredentials : true } ,
+        );
+
+        setUser(res.data.user)
+
+      } catch {
+        setUser(null)
+      }
+    }
+    fetchUser();
+  } , []); 
 
   return (
     <nav className="flex items-center justify-between px-10 py-4 bg-white">
