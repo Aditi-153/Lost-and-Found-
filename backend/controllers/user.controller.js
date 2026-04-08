@@ -41,7 +41,7 @@ export const registerUser = async (req, res) => {
         expiresIn: "1d",
       },
     );
-    
+
     res.cookie("userToken", token, {
       httpOnly: true,
       sameSite: "lax",
@@ -138,6 +138,15 @@ export const userProfile = async (req, res) => {
 
 export const userLogout = (req, res) => {
   try {
+    const token = req.cookies?.userToken;
+
+    // ❌ No token = user not logged in
+    if (!token) {
+      return res.status(401).json({
+        message: "User not logged in",
+      });
+    }
+
     res.clearCookie("userToken", {
       httpOnly: true,
       sameSite: "lax",

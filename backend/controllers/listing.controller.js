@@ -4,7 +4,8 @@ import keyword_extractor from "keyword-extractor";
 export const reportLostItem = async (req, res) => {
   try {
     const { location, description, title } = req.body;
-    const imageUrl = req.file?.secure_url || req.file?.path;
+
+    const imageUrl = req.file ? req.file.secure_url || req.file.path : "";
 
     if (!req.user) {
       return res.status(401).json({
@@ -12,25 +13,25 @@ export const reportLostItem = async (req, res) => {
       });
     }
 
-    if (!title || !location || !description || !req.file) {
+    if (!title || !location || !description) {
       return res.status(400).json({
         message: "All fields are required",
       });
     }
 
-    const lostKeyword = keyword_extractor.extract(description, {
+    const keywords = keyword_extractor.extract(description, {
       language: "english",
-      remove_digits: true,
+      remove_digits: false,
       return_changed_case: true,
       remove_duplicates: true,
     });
 
     const lostItem = await Listing.create({
       title,
-      location,
+      location: location.toLowerCase(),
       description,
       imageUrl,
-      descriptionArr: lostKeyword,
+      descriptionArr: keywords,
       status: "lost",
       owner: req.user._id,
     });
@@ -40,8 +41,6 @@ export const reportLostItem = async (req, res) => {
       lostItem,
     });
   } catch (error) {
-    console.error("ERROR:", error);
-
     return res.status(500).json({
       message: "Failed to report lost item",
       error: error.message,
@@ -66,19 +65,19 @@ export const reportFoundItem = async (req, res) => {
       });
     }
 
-    const foundKeyword = keyword_extractor.extract(description, {
+    const keywords = keyword_extractor.extract(description, {
       language: "english",
-      remove_digits: true,
+      remove_digits: false,
       return_changed_case: true,
       remove_duplicates: true,
     });
 
     const foundItem = await Listing.create({
       title,
-      location,
+      location: location.toLowerCase(),
       description,
       imageUrl,
-      descriptionArr: foundKeyword,
+      descriptionArr: keywords,
       status: "found",
       owner: req.user._id,
     });
@@ -88,8 +87,6 @@ export const reportFoundItem = async (req, res) => {
       foundItem,
     });
   } catch (error) {
-    console.error(error);
-
     return res.status(500).json({
       message: "Failed to report found item",
       error: error.message,
@@ -102,13 +99,11 @@ export const getItems = async (req, res) => {
     const userId = req.user._id;
 
     const items = await Listing.find({
-      owner : userId, 
+      owner: userId,
     });
 
     const lost = items.filter((item) => item.status === "lost");
     const found = items.filter((item) => item.status === "found");
-
-    console.log(req.user);
 
     res.json({ lost, found });
   } catch (error) {
@@ -128,32 +123,34 @@ export const matchItem = async (req, res) => {
 
     const keywords = keyword_extractor.extract(description, {
       language: "english",
-      remove_digits: true,
+      remove_digits: false,
       return_changed_case: true,
       remove_duplicates: true,
     });
 
+    const locationLower = location.toLowerCase();
+
     const lostItems = await Listing.find({
-      location,
+      location: locationLower,
       status: "lost",
-      isMatched: false,
     });
 
     const foundItems = await Listing.find({
-      location,
+      location: locationLower,
       status: "found",
-      isMatched: false,
     });
 
     let matches = [];
 
     for (let lost of lostItems) {
       for (let found of foundItems) {
-        const common = (lost.descriptionArr || []).filter((word) =>
-          (found.descriptionArr || []).includes(word),
+        const common = (lost.descriptionArr || []).filter(
+          (word) =>
+            (found.descriptionArr || []).includes(word) &&
+            keywords.includes(word),
         );
 
-        if (common.length >= 2) {
+        if (common.length >= 1) {
           lost.isMatched = true;
           found.isMatched = true;
 
@@ -174,8 +171,6 @@ export const matchItem = async (req, res) => {
       matches,
     });
   } catch (error) {
-    console.error("ERROR:", error);
-
     return res.status(500).json({
       message: "Failed to match items",
       error: error.message,
