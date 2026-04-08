@@ -1,7 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -12,9 +13,9 @@ const Signup = () => {
     password: "",
   });
 
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -33,10 +34,10 @@ const Signup = () => {
         { withCredentials: true },
       );
 
-      
-
       toast.success("Signup successful");
-      window.location.href = "/home";
+      setTimeout(() => {
+        navigate("/home");
+      }, 1000);
     } catch (error) {
       toast.error(error?.response?.data?.message || "Something went wrong");
     } finally {

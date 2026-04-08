@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "./Navbar";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 
@@ -21,11 +21,15 @@ const Match = () => {
           { withCredentials: true },
         );
 
+        console.log("MATCH RESPONSE:", res.data);
+
         setMatches(res.data.matches || []);
       } catch (err) {
         console.log(err);
       }
     };
+
+    
 
     if (location && description) {
       fetchMatches();

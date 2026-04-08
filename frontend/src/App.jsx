@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import Found from "./pages/Found";
 import Lost from "./pages/Lost";
 import Report from "./pages/Report";
-import Match from "./pages/Match";
+import Match from "./components/Match";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDash from "./pages/AdminDash";
 

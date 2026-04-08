@@ -2,14 +2,16 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import axios from "axios";
 
+
 const Report = () => {
   const [lostItems, setLostItems] = useState([]);
   const [foundItems, setFoundItems] = useState([]);
   const [activeTab, setActiveTab] = useState("lost");
-  
+  const [user, setUser] = useState(null);
+  const name = user?.name ?? "User";
 
   useEffect(() => {
-    const fetchItems = async () => {
+    const fetchData = async () => {
       try {
         const res = await axios.get(import.meta.env.VITE_GET_ITEMS_URL, {
           withCredentials: true,
@@ -20,18 +22,22 @@ const Report = () => {
           setFoundItems(res.data.found || []);
         }
 
-        
+        const userRes = await axios.get(import.meta.env.VITE_PROFILE_URL, {
+          withCredentials: true,
+        });
+
+        setUser(userRes.data.user);
       } catch (err) {
         console.log(err);
       }
     };
 
-    fetchItems();
+    fetchData();
   }, []);
   return (
     <div className="bg-gray-100 min-h-screen pb-10">
       <Navbar />
-    <div className=""></div>
+      <div className=""></div>
       <div className="max-w-5xl mx-auto mt-10 px-4 space-y-6">
         <div className="bg-white p-6 rounded-xl shadow">
           <h1 className="text-2xl font-bold">Welcome, {name}!</h1>
@@ -59,7 +65,6 @@ const Report = () => {
           </div>
         </div>
 
-      
         <div className="bg-white p-4 rounded-xl shadow flex gap-2">
           <button
             onClick={() => setActiveTab("lost")}
@@ -80,7 +85,6 @@ const Report = () => {
           </button>
         </div>
 
-      
         {activeTab === "lost" && lostItems.length === 0 && (
           <div className="bg-white p-6 rounded-xl shadow text-center">
             No lost items found
@@ -94,7 +98,6 @@ const Report = () => {
         )}
 
         <div className="grid grid-cols-3 gap-6">
-         
           {activeTab === "lost" &&
             lostItems.map((item) => (
               <div
@@ -117,7 +120,6 @@ const Report = () => {
               </div>
             ))}
 
-          
           {activeTab === "found" &&
             foundItems.map((item) => (
               <div
@@ -138,9 +140,6 @@ const Report = () => {
         </div>
       </div>
     </div>
-
-      
-    
   );
 };
 
