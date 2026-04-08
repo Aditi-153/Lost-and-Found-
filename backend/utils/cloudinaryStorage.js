@@ -10,10 +10,10 @@ const storage = new CloudinaryStorage({
   }),
 });
 
-// 🔥 IMPORTANT: explicitly disable fileFilter
+
 export const upload = multer({
   storage,
   fileFilter: (req, file, cb) => {
-    cb(null, true); // allow ALL files (no rejection)
+    cb(null, true); 
   },
 });

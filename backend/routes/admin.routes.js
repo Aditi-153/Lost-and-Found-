@@ -1,12 +1,25 @@
 import express from "express";
-import { adminLogin , adminLogout, filterListings } from "../controllers/admin.controller.js";
+import {
+  adminLogin,
+  adminLogout,
+  filterListings,
+  getAllListings,
+  deleteListing,
+} from "../controllers/admin.controller.js";
 import { adminAuth } from "../middlewares/admin.auth.js";
 
 const router = express.Router();
 
-//  http://localhost:3000/admin/...
-router.post("/login" , adminLogin);
-router.get("/listings" , adminAuth , filterListings);
-router.post("/logout" ,adminAuth , adminLogout )
+
+router.post("/login", adminLogin);
+
+
+router.post("/logout", adminAuth, adminLogout);
+
+router.get("/listings", adminAuth, getAllListings);
+
+router.get("/filter", adminAuth, filterListings);
+
+router.delete("/listing/:id", adminAuth, deleteListing);
 
 export default router;

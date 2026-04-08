@@ -101,29 +101,53 @@ export const filterListings = async (req, res) => {
   }
 };
 
-export const blockUser = async (req, res) => {
+
+export const getAllListings = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { stDate, endDate } = req.query;
 
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { isBlocked: true },
-      { new: true },
-    );
+    let filter = {};
 
-    if (!user) {
+  
+    if (stDate && endDate) {
+      filter.createdAt = {
+        $gte: new Date(stDate),
+        $lte: new Date(endDate),
+      };
+    }
+
+    const listings = await Listing.find(filter)
+      .populate("owner", "name email") 
+      .sort({ createdAt: -1 });
+
+    res.json({
+      userListing: listings,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch listings" });
+  }
+};
+
+export const deleteListing = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const listing = await Listing.findByIdAndDelete(id);
+
+    if (!listing) {
       return res.status(404).json({
-        message: "User not found",
+        message: "Listing not found",
       });
     }
 
     res.status(200).json({
-      message: "User blocked successfully",
-      user,
+      message: "Listing deleted successfully",
     });
   } catch (error) {
-    return res.status(500).json({
-      message: "failed to block user",
+    console.error(error);
+    res.status(500).json({
+      message: "Failed to delete listing",
       error: error.message,
     });
   }

@@ -41,8 +41,12 @@ export const registerUser = async (req, res) => {
         expiresIn: "1d",
       },
     );
-
-    res.cookie("userToken", token);
+    
+    res.cookie("userToken", token, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: false,
+    });
 
     return res.status(201).json({
       message: "User created successfully!",
@@ -96,11 +100,14 @@ export const loginUser = async (req, res) => {
       },
     );
 
-    res.cookie("userToken", token);
+    res.cookie("userToken", token, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: false,
+    });
 
     res.status(200).json({
       message: "Login successfully",
-      token,
       user: {
         name: user.name,
         id: user._id,
@@ -117,19 +124,9 @@ export const loginUser = async (req, res) => {
 
 export const userProfile = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    const user = await User.findById(id);
-
-    if (!user) {
-      return res.status(404).json({
-        message: "User not found",
-      });
-    }
-
     return res.status(200).json({
       message: "User profile",
-      user,
+      user: req.user,
     });
   } catch (error) {
     return res.status(500).json({
@@ -141,7 +138,11 @@ export const userProfile = async (req, res) => {
 
 export const userLogout = (req, res) => {
   try {
-    const token = res.clearCookie("userToken");
+    res.clearCookie("userToken", {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: false,
+    });
 
     return res.status(200).json({
       message: "Logout successfully",
