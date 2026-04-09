@@ -32,6 +32,11 @@ const Found = () => {
   const handleFound = async () => {
     if (loading) return;
 
+    if (!formData.title || !formData.description || !formData.location) {
+      toast.error("All fields are required");
+      return;
+    }
+
     if (!formData.img) {
       toast.error("Please upload an image");
       return;
@@ -49,6 +54,9 @@ const Found = () => {
 
       await axios.post(import.meta.env.VITE_REPORT_FOUND_URL, data, {
         withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       toast.success("report found item successful");

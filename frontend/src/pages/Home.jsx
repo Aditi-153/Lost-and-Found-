@@ -8,8 +8,6 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-200 relative">
       <Navbar />
-
-     
       <div className="flex flex-col items-center justify-center relative">
         <Hero
           h1="Lost, Report, and Find"

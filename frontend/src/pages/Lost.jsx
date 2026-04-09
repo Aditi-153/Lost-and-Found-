@@ -31,6 +31,12 @@ const Lost = () => {
   const handleLost = async () => {
     if (loading) return;
 
+   
+    if (!formData.title || !formData.description || !formData.location) {
+      toast.error("All fields are required");
+      return;
+    }
+
     if (!formData.img) {
       toast.error("Please upload an image");
       return;
@@ -49,7 +55,7 @@ const Lost = () => {
       const res = await axios.post(import.meta.env.VITE_REPORT_LOST_URL, data, {
         withCredentials: true,
         headers: {
-          "Content-Type": "multipart/form-data", 
+          "Content-Type": "multipart/form-data",
         },
       });
 
@@ -66,14 +72,15 @@ const Lost = () => {
         );
       }
 
-      navigate("/match ", {
+      navigate("/match", {
+     
         state: {
           location: formData.location,
           description: formData.description,
         },
       });
     } catch (error) {
-      console.log("ERROR:", error?.response?.data || error.message); // ✅ better debug
+      console.log("ERROR:", error?.response?.data || error.message);
       toast.error(error?.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);

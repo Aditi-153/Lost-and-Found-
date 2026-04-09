@@ -22,7 +22,9 @@ const Hero = ({ h1, h2, desc }) => {
         className="p-3 text-sm font-sans mt-4 shadow-xl text-black bg-white rounded-md">
           Found Something ?
         </Link>
-        <Link className="p-3 text-sm font-sans shadow-xl  bg-green-800 rounded-md">
+        <Link 
+        to="/how-it-works"
+        className="p-3 text-sm font-sans shadow-xl  bg-green-800 rounded-md">
           How it works ?
         </Link>
       </div>

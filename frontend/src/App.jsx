@@ -9,6 +9,7 @@ import Report from "./pages/Report";
 import Match from "./components/Match";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDash from "./pages/AdminDash";
+import Working from "./components/Working";
 
 function App() {
   return (
@@ -20,9 +21,11 @@ function App() {
         <Route path="/found" element={<Found />}></Route>
         <Route path="/lost" element={<Lost />}></Route>
         <Route path="/checkReport" element={<Report />}></Route>
-       <Route path="/match" element={<Match />} />
+       <Route path="/match" element={<Match />} /> 
        <Route path="/admin/login" element={<AdminLogin />}></Route>
        <Route path="/admin-dashboard" element={<AdminDash />}></Route>
+       <Route path="/how-it-works" element={<Working   />} />
+       
 
       </Routes>
 
