@@ -3,11 +3,14 @@ import Navbar from "./Navbar";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 
+import Contact from "./Contact";
+import toast from "react-hot-toast";
+
 const Match = () => {
   const [matches, setMatches] = useState([]);
-
   const locationData = useLocation();
   const { location, description } = locationData.state || {};
+  const [selectedContact, setSelectedContact] = useState(null);
 
   useEffect(() => {
     const fetchMatches = async () => {
@@ -20,16 +23,11 @@ const Match = () => {
           },
           { withCredentials: true },
         );
-
-        console.log("MATCH RESPONSE:", res.data);
-
         setMatches(res.data.matches || []);
       } catch (err) {
         console.log(err);
       }
     };
-
-    
 
     if (location && description) {
       fetchMatches();
@@ -79,11 +77,29 @@ const Match = () => {
                 <p className="text-xs text-gray-400 mt-2">
                   {new Date(item.createdAt).toLocaleDateString()}
                 </p>
+
+                <button
+                  onClick={() => {
+                    if (item.owner) {
+                      setSelectedContact(item);
+                    } else {
+                      toast("Contact not available");
+                    }
+                  }}
+                  className="bg-blue-500 text-white p-2 mt-3 w-full rounded-xl"
+                >
+                  Contact owner
+                </button>
               </div>
             </div>
           ))}
         </div>
       </div>
+
+      <Contact
+        contact={selectedContact}
+        onClose={() => setSelectedContact(null)}
+      />
     </>
   );
 };
