@@ -5,13 +5,15 @@ export const reportLostItem = async (req, res) => {
   try {
     const { location, description, title } = req.body;
 
-    const imageUrl = req.file ? req.file.secure_url || req.file.path : "";
+    const imageUrl = req.file?.path || "";
 
     if (!req.user) {
       return res.status(401).json({
         message: "Unauthorized",
       });
     }
+
+    console.log(req.file);
 
     if (!title || !location || !description) {
       return res.status(400).json({
@@ -51,13 +53,16 @@ export const reportLostItem = async (req, res) => {
 export const reportFoundItem = async (req, res) => {
   try {
     const { location, description, title } = req.body;
-    const imageUrl = req.file?.secure_url || req.file?.path;
+    const imageUrl = req.file?.path;
 
     if (!req.user) {
       return res.status(401).json({
         message: "Unauthorized",
       });
     }
+
+    console.log(req.file);
+    console.log(req.body);
 
     if (!title || !location || !description || !req.file) {
       return res.status(400).json({
@@ -133,12 +138,12 @@ export const matchItem = async (req, res) => {
     const lostItems = await Listing.find({
       location: locationLower,
       status: "lost",
-    });
+    }).populate("owner", "name email phone imageUrl");
 
     const foundItems = await Listing.find({
       location: locationLower,
       status: "found",
-    });
+    }).populate("owner", "name email phone imageUrl");;
 
     let matches = [];
 

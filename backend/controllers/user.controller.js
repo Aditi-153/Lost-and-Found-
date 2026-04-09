@@ -140,7 +140,7 @@ export const userLogout = (req, res) => {
   try {
     const token = req.cookies?.userToken;
 
-    // ❌ No token = user not logged in
+   
     if (!token) {
       return res.status(401).json({
         message: "User not logged in",
