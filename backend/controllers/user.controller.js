@@ -32,16 +32,6 @@ export const registerUser = async (req, res) => {
       password: hashedPassword,
     });
 
-    const token = jwt.sign(
-      {
-        id: user._id,
-      },
-      process.env.JWT_SECRET_KEY,
-      {
-        expiresIn: "1d",
-      },
-    );
-
     res.cookie("userToken", token, {
       httpOnly: true,
       sameSite: "lax",
@@ -139,8 +129,6 @@ export const userProfile = async (req, res) => {
 export const userLogout = (req, res) => {
   try {
     const token = req.cookies?.userToken;
-
-   
     if (!token) {
       return res.status(401).json({
         message: "User not logged in",

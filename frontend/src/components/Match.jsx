@@ -71,8 +71,9 @@ const Match = () => {
               </a>
 
               <div className="p-4">
-                <h2 className="font-bold">{item.location}</h2>
+                <h2 className="font-bold">{item.title}</h2>
                 <p className="text-sm text-gray-500">{item.description}</p>
+                
 
                 <p className="text-xs text-gray-400 mt-2">
                   {new Date(item.createdAt).toLocaleDateString()}
